@@ -1,0 +1,19 @@
+# Ignora caches e arquivos do Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignora ambiente virtual
+venv/
+
+# Ignora arquivos PDF e de upload
+uploads/
+*.pdf
+*.zip
+
+# Ignora arquivos de log e temporários
+*.log
+*.tmp
+
+# Ignora variáveis de ambiente e senhas locais
+.env
