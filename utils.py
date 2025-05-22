@@ -1,6 +1,7 @@
 import os, uuid, magic
 from pypdf import PdfReader, PdfWriter
 import subprocess
+import pyclamd
 
 def validar_pdf(arquivo):
     tipo = magic.from_buffer(arquivo.read(2048), mime=True)
@@ -43,9 +44,23 @@ def comprimir_pdf_ghostscript(entrada, saida, qualidade="screen"):
     
 def escanear_arquivo(path):
     try:
-        resultado = subprocess.run(["clamscan", path], capture_output=True, text=True)
-        return "OK" in resultado.stdout
-    except Exception:
+        cd = pyclamd.ClamdNetworkSocket(host='clamav', port=3310)
+
+        if not cd.ping():
+            print("[!] ClamAV não está respondendo")
+            return False
+
+        resultado = cd.scan_file(path)
+
+        if resultado is None:
+            print(f"[✔] Arquivo limpo: {path}")
+            return True
+        else:
+            print(f"[!] Vírus detectado: {resultado}")
+            return False
+
+    except Exception as e:
+        print(f"[!] Erro ao conectar com ClamAV: {e}")
         return False
     
 def limpar_metadados_pdf(entrada, destino):

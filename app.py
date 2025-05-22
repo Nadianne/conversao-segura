@@ -23,7 +23,7 @@ UPLOAD_DIR = "/tmp/uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 # 🚀 Inicialização do Flask
-app = Flask(__name__)
+app = Flask(__name__, template_folder="app/templates", static_folder="app/static")
 app.secret_key = os.environ.get("FLASK_SECRET_KEY", "fallback_inseguro")
 app.config["UPLOAD_FOLDER"] = UPLOAD_DIR
 app.config["MAX_CONTENT_LENGTH"] = 100 * 1024 * 1024  # 100MB
@@ -179,4 +179,4 @@ def ratelimit_handler(e):
 
 # ▶️ Executa o app
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port=5000, debug=True)
